@@ -7,8 +7,10 @@ clientApp.controller("clientController",function ($scope,$http){
 	$scope.getcredentials=true;
 	$scope.selectTables=false;
 	$scope.selectColumns=false;
+	$scope.columnDetails=false;
 	$scope.tableNames=[]
 	$scope.selectedColumns={}
+	$scope.metadata={}
 	$scope.credentialsSubmit=function(){
 
 	data={
@@ -67,6 +69,25 @@ $scope.columnsSubmit=function(){
 		}
 
 	})
+	$scope.selectColumns=false;
+	$scope.columnDetails=true;
 	console.log($scope.selectedColumns)
+}
+
+$scope.metadataSubmit=function(){
+	$("#columnDetails .table").each(function(){
+		tableName=$(this).attr("id");
+		$scope.metadata[tableName]={}
+		$(this).find(".column").each(function(){
+			columnName=$(this).attr("name")
+			$scope.metadata[tableName][columnName]={}
+			$scope.metadata[tableName][columnName]["description"]=$(this).find(".description").val()
+			$scope.metadata[tableName][columnName]["columnValuesCodeSystem"]=$(this).find(".column-values-code-system").val()
+			$scope.metadata[tableName][columnName]["columnNameCode"]=$(this).find(".column-name-code").val()
+			$scope.metadata[tableName][columnName]["columnNameCodeSystem"]=$(this).find(".column-name-code-system").val()
+		})
+
+	})
+	console.log("metadata",$scope.metadata)
 }
 })
