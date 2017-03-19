@@ -3,13 +3,14 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var mysql = require('mysql');
 var connection=""
+var csv = require('express-csv');
 
 const app = express()
 app.use(express.static('public'))
 app.use(bodyParser());
 
-app.get('/', function(req, res) {
-    res.sendfile(path.join(__dirname, 'public', 'index.html'));
+app.get('/metadata', function(req, res) {
+    res.sendfile(path.join(__dirname, 'public', 'metadataGeneration.html'));
 })
 
 app.post('/connect', function(req, res) {
@@ -32,6 +33,32 @@ app.post('/connect', function(req, res) {
         else
             console.log('Error while performing Query.');
     });
+
+});
+
+app.post("/exportCSV",function(req,res){
+
+	connection = mysql.createConnection({
+        host: 'localhost',
+        user: "root",
+        password: "",
+        database: "somedb"
+    });
+    connection.connect();
+	var query=req.body.query;
+	console.log(query)
+
+	connection.query(query,function(err,rows,fields){
+		if(!err){
+			console.log("fetched")
+			var headers = {};
+            for (key in rows[0]) {
+                headers[key] = key;
+            }		
+            rows.unshift(headers);
+            res.csv(rows);
+        }
+	})
 
 });
 
