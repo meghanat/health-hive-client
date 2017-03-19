@@ -89,5 +89,10 @@ $scope.metadataSubmit=function(){
 
 	})
 	console.log("metadata",$scope.metadata)
+	var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify($scope.metadata));
+	var dlAnchorElem = document.getElementById('downloadAnchorElem');
+	dlAnchorElem.setAttribute("href",     dataStr     );
+	dlAnchorElem.setAttribute("download", "metadata.json");
+	dlAnchorElem.click();
 }
 })
