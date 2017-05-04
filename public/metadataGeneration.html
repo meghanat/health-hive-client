@@ -10,10 +10,23 @@
 
 <body ng-controller="clientController">
 	<div class="container">
+
 		<div class="row" ng-show="getcredentials">
 			<form class="col-md-6 col-md-offset-3" style="margin-top:3em">
-				<h3>Enter Database credentials</h3>
+				<h3 class="text-center">Enter Database Details</h3>
 				<hr/>
+				<div class="form-group">
+					<label for="dbms">DBMS</label>
+					<select ng-model="dbms" class="form-control" name="dbms" id="dbms">
+						<option value="mysql" selected>MySQL</option>
+						<option value="bahmni">Bahmni</option>
+						<option value="postgres">PostgreSQL</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="host">Host</label>
+					<input ng-model="host" type="text" class="form-control" name="host" id="host" placeholder="host">
+				</div>
 				<div class="form-group">
 					<label for="username">Username</label>
 					<input ng-model="username" type="text" class="form-control" name="username" id="username" placeholder="username">
@@ -33,12 +46,24 @@
 		<div class="row" ng-show="selectTables">
 
 			<form class="col-md-6 col-md-offset-3" style="margin-top:3em">
-				<label> <h3>Select Tables to export</h3></label>
+				<h3 class="text-center">Select Tables to export</h3>
 				<hr/>
-				<div class="row" style="border:1px solid black; border-radius:5px;padding:1em;overflow:auto;height:350px">
-					<div ng-repeat="table in tableNames" class="form-group col-md-offset-2">
-						<label><input type="checkbox" name="{{table}}" value="{{table}}"/> {{table}}</label>
-					</div>
+				<div class="row" style="padding:1em;overflow-y:scroll;;height:350px">
+					<table class="table table-hover table-bordered table-striped" >
+						<thead>
+							<th>Select</th>
+							<th>Table</th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="table in tableNames">
+								<td>
+									<input type="checkbox" name="{{table}}" value="{{table}}"/>
+								</td> 
+								<td>{{table}}</td>
+							</tr>
+						</tbody>
+					</table>
+					
 				</div>
 				<hr/>
 				<button type="submit" class="btn btn-primary" ng-click="tablesSubmit()">Submit</button>
@@ -47,15 +72,26 @@
 		<div class="row" ng-show="selectColumns" id="selectColumns">
 
 			<form class="col-md-6 col-md-offset-3" style="margin-top:3em">
-				<label><h3>Select Columns to export</h3></label>
+				<h3 class="text-center">Select Columns to export</h3>
 				<hr/>
-				<div ng-repeat="(table,columns) in columns_in_tables"class="row" style="border:1px solid black; border-radius:5px; padding:1em">
+				<div ng-repeat="(table,columns) in columns_in_tables"class="row" style="padding:1em">
 					<label><h4>{{table}}</h4></label>
-					<hr/>
-					<div style="overflow:auto;height:200px;">
-						<div ng-repeat="column in columns" class="form-group">
-							<label><input type="checkbox" name="{{table}}" value="{{column.column_name}}"/> {{column.column_name}}</label>
-						</div>
+					
+					<div style="overflow-y:scroll;height:200px;">
+						<table class="table table-hover table-bordered table-striped" >
+							<thead>
+								<th>Select</th>
+								<th>Column</th>
+							</thead>
+							<tbody>
+								<tr ng-repeat="column in columns">
+									<td>
+										<input type="checkbox" name="{{table}}" value="{{column.column_name}}"/>
+									</td> 
+									<td>{{column.column_name}}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 				<hr/>
@@ -68,12 +104,12 @@
 				<label><h3>Enter Column Details</h3></label>
 				<hr/>
 				<div ng-repeat="(table,columns) in selectedColumns"class="row" style="padding:1em">
-					<table class="table table-hover table-bordered" id="{{table}}">
+					<table class="table table-hover table-bordered table-striped" id="{{table}}">
 					  <thead>
 					  	<tr><h3>{{table}}</h3></tr>
 						<tr>
 						  	<th>Column</th>
-						  	<th>Encoded</th>
+						  	<th>Type</th>
 							<th>Code-system</th>
 						  	<th>Column Code</th>
 						  	<th>Column Code Code-system</th>
@@ -83,7 +119,15 @@
 					  <tbody>
 						<tr ng-repeat="column in columns" class="column" name="{{column}}">
 						  <td>{{column}}</td>
-						  <td><input type="checkbox" name="{{column}}" class="encoded"></td>
+						  <td>
+						  	<div>
+						  		<input type="checkbox" name="{{column}}" class="encoded" style="margin:2px"> Encoded
+						  		<br/>
+						  		<input type="checkbox" name="{{column}}" class="patient_id" style="margin:2px"> Patient ID
+						  		<br/>
+						  		<input type="checkbox" name="{{column}}" class="effectiveTime" style="margin:2px"> Effective Time
+						  	</div>
+						  </td>
 						  <td><input type="text" name="{{column}}" class="column-values-code-system"></td>
 						  <td><input type="text" name="{{column}}" class="column-name-code"></td>
 						  <td><input type="text" name="{{column}}" class="column-name-code-system"></td>

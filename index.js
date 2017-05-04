@@ -29,10 +29,11 @@ app.post('/connect', function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     var database = req.body.database;
+    var host=req.body.host;
 
 
     connection = mysql.createConnection({
-        host: 'localhost',
+        host: host,
         user: username,
         password: password,
         database: database
@@ -119,36 +120,6 @@ app.post("/exportCDA", function(req, res) {
 
 
     })
-
-
-
-
-    
-
-
-
-
-
-        // filename = "cdaExport/input/" + csvFiles[file].name
-        // csvFiles[file].mv(filename, function(err) {
-        //     if (err)
-        //         return res.status(500).send(err);
-        //     else {
-        //         no_files = no_files - 1;
-        //         if (no_files == 0) {
-        //             py = spawn('python', ['cdaExport/exporter.py'])
-
-        //             py.stdout.on('end', function() {
-        //                 res.send("<html>Export Complete</html>")
-                        
-        //             });
-
-        //         }
-        //     }
-
-        // });
-
-    
 
 });
 

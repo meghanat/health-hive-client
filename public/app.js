@@ -1,8 +1,10 @@
 var clientApp = angular.module('clientApp', [])
 clientApp.controller("clientController", function($scope, $http) {
-	$scope.username = "";
+	$scope.username = "root";
 	$scope.password = "";
-	$scope.database_name = "";
+	$scope.database= "somedb";
+	$scope.dbms="mysql";
+	$scope.host="localhost";
 	$scope.getcredentials = true;
 	$scope.selectTables = false;
 	$scope.selectColumns = false;
@@ -14,7 +16,8 @@ clientApp.controller("clientController", function($scope, $http) {
 		data = {
 			"username": $scope.username,
 			"password": $scope.password,
-			"database": $scope.database
+			"database": $scope.database,
+			"host":$scope.host
 		}
 		console.log(data)
 		var res = $http.post("/connect", data).then(function(data) {
@@ -67,6 +70,7 @@ clientApp.controller("clientController", function($scope, $http) {
 				columnName = $(this).attr("name")
 				$scope.metadata[tableName][columnName] = {}
 				$scope.metadata[tableName][columnName]["is_encoded"] = $(this).find(".encoded").prop("checked")
+				$scope.metadata[tableName][columnName]["is_patient_id"] = $(this).find(".patient_id").prop("checked")
 				$scope.metadata[tableName][columnName]["description"] = $(this).find(".description").val()
 				$scope.metadata[tableName][columnName]["columnValuesCodeSystem"] = $(this).find(".column-values-code-system").val()
 				$scope.metadata[tableName][columnName]["columnNameCode"] = $(this).find(".column-name-code").val()
@@ -74,7 +78,7 @@ clientApp.controller("clientController", function($scope, $http) {
 			})
 		})
 		console.log("metadata", $scope.metadata)
-		var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify($scope.metadata));
+		var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify($scope.metadata,null,4));
 		var dlAnchorElem = document.getElementById('downloadAnchorElem');
 		dlAnchorElem.setAttribute("href", dataStr);
 		dlAnchorElem.setAttribute("download", "metadata.json");
