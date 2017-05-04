@@ -66,6 +66,7 @@ clientApp.controller("clientController", function($scope, $http) {
 			$(this).find(".column").each(function() {
 				columnName = $(this).attr("name")
 				$scope.metadata[tableName][columnName] = {}
+				$scope.metadata[tableName][columnName]["is_encoded"] = $(this).find(".encoded").prop("checked")
 				$scope.metadata[tableName][columnName]["description"] = $(this).find(".description").val()
 				$scope.metadata[tableName][columnName]["columnValuesCodeSystem"] = $(this).find(".column-values-code-system").val()
 				$scope.metadata[tableName][columnName]["columnNameCode"] = $(this).find(".column-name-code").val()
