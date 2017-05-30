@@ -5,32 +5,50 @@ clientApp.controller("clientController", function($scope, $http) {
 	$scope.database= "somedb";
 	$scope.dbms="mysql";
 	$scope.host="localhost";
-	$scope.getcredentials = true;
+	$scope.getcredentials = false;
 	$scope.selectTables = false;
 	$scope.selectColumns = false;
 	$scope.columnDetails = false;
 	$scope.tableNames = []
 	$scope.selectedColumns = {}
 	$scope.metadata = {}
+	$scope.organisation="";
+	$scope.getOrg=true;
+
+	$scope.submitOrg=function(){
+		$scope.getOrg=false;
+		$scope.getcredentials=true;
+
+	}
+
 	$scope.credentialsSubmit = function() {
 		data = {
 			"username": $scope.username,
 			"password": $scope.password,
 			"database": $scope.database,
-			"host":$scope.host
+			"host":$scope.host,
+			"dbms":$scope.dbms
 		}
 		console.log(data)
 		var res = $http.post("/connect", data).then(function(data) {
 			console.log(data)
 			$scope.getcredentials = false;
-			for (var i in data.data) {
-				row = data.data[i]
-				tablename = row[Object.keys(row)[0]]
-				console.log(tablename)
-				$scope.tableNames.push(tablename)
+			if($scope.dbms=="mysql"){
+			
+				for (var i in data.data) {
+					row = data.data[i]
+					tablename = row[Object.keys(row)[0]]
+					console.log(tablename)
+					$scope.tableNames.push(tablename)
+				}
+			}
+			else if($scope.dbms=="postgres"){
+
+				$scope.tableNames=data["data"]
+
 			}
 			$scope.selectTables = true;
-			console.log(data["data"])
+			
 			console.log($scope.tableNames)
 		})
 	}
@@ -40,7 +58,14 @@ clientApp.controller("clientController", function($scope, $http) {
 			$scope.selectedTables.push($(this).attr('name'));
 		});
 		$http.post("/columns", $scope.selectedTables).then(function(data) {
-			$scope.columns_in_tables = data.data
+
+			if($scope.dbms=="mysql"){
+				$scope.columns_in_tables = data.data	
+			}
+			else if($scope.dbms=="postgres"){
+				console.log(data.data)
+				$scope.columns_in_tables = data.data	
+			}
 			console.log($scope.columns_in_tables)
 			$scope.selectTables = false;
 			$scope.selectColumns = true;
@@ -77,8 +102,22 @@ clientApp.controller("clientController", function($scope, $http) {
 				$scope.metadata[tableName][columnName]["columnNameCodeSystem"] = $(this).find(".column-name-code-system").val()
 			})
 		})
-		console.log("metadata", $scope.metadata)
-		var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify($scope.metadata,null,4));
+		var metadata_file={};
+		metadata_file.organisation=$scope.organisation;
+		metadata_file.tables=[]
+
+		for(table in $scope.metadata){
+
+			table_entry={}
+			table_entry.name=table;
+			table_entry.filename=table+".csv"
+			table_entry.columns=$scope.metadata[table]
+			metadata_file.tables.push(table_entry);
+
+		}
+
+		console.log("metadata",metadata_file)
+		var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(metadata_file,null,4));
 		var dlAnchorElem = document.getElementById('downloadAnchorElem');
 		dlAnchorElem.setAttribute("href", dataStr);
 		dlAnchorElem.setAttribute("download", "metadata.json");
