@@ -10,9 +10,19 @@
 
 <body ng-controller="clientController">
 	<div class="container">
+		<h1 class="text-center" style="margin-top:2em"> Vaidya Nirnaya - Offline Tool</h1>
+		<div class="row col-md-4 col-md-offset-4"  >
+				<hr/>
+				
+				<img src="../images/ccbd-logo.png" width="40%"  ></img>
+				<img src="../images/pes_logo.png" width="40%" style="margin-left:2em"  ></img>
+				<hr/>	
 
-		<div class="row col-md-4 col-md-offset-4" style="margin-top:6em"  ng-show="getOrg">
-			<div class="form-group ">
+	</div>
+		<div class="row col-md-4 col-md-offset-4"  style="margin-top:1px" ng-show="getOrg">
+			
+
+			<div class="form-group row">
 					<h3 class="text-center">Enter the Organisation's Name</h3>
 					<hr/>
 					<input ng-model="organisation" type="text" class="form-control" name="organisation" id="organisation" placeholder="Organisation">
@@ -22,7 +32,7 @@
 			<button type="submit" class="btn btn-primary" ng-click="submitOrg()">Submit</button>
 		</div>
 		<div class="row" ng-show="getcredentials">
-			<form class="col-md-6 col-md-offset-3" style="margin-top:3em">
+			<form class="col-md-6 col-md-offset-3" style="margin-top:1em">
 				<h3 class="text-center">Enter Database Details</h3>
 				<hr/>
 				<div class="form-group">
@@ -55,7 +65,7 @@
 		</div>
 		<div class="row" ng-show="selectTables">
 
-			<form class="col-md-6 col-md-offset-3" style="margin-top:3em">
+			<form class="col-md-6 col-md-offset-3" style="margin-top:1em">
 				<h3 class="text-center">Select Tables to export</h3>
 				<hr/>
 				<div class="row" style="padding:1em;overflow-y:scroll;;height:350px">
@@ -81,7 +91,7 @@
 		</div>
 		<div class="row" ng-show="selectColumns" id="selectColumns">
 
-			<form class="col-md-6 col-md-offset-3" style="margin-top:3em">
+			<form class="col-md-6 col-md-offset-3" style="margin-top:1em">
 				<h3 class="text-center">Select Columns to export</h3>
 				<hr/>
 				<div ng-repeat="(table,columns) in columns_in_tables"class="row" style="padding:1em">
@@ -110,7 +120,7 @@
 		</div>
 		<div class="row" ng-show="columnDetails" id="columnDetails">
 
-			<form class="col-md-12" style="margin-top:3em">
+			<form class="col-md-12" style="margin-top:1em">
 				<label><h3>Enter Column Details</h3></label>
 				<hr/>
 				<div ng-repeat="(table,columns) in selectedColumns"class="row" style="padding:1em">
@@ -150,7 +160,9 @@
 				<a id="downloadAnchorElem" style="display:none"></a>
 			</form>
 		</div>
+		
 	</div>
+	
 </body>
 
 </html>

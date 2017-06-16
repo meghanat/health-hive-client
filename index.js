@@ -39,7 +39,20 @@ app.post('/connect', function(req, res) {
     host=req.body.host;
     dbms=req.body.dbms;
 
-    if(dbms=="mysql")
+    if(dbms=="bahmni")
+    {
+        connection = mysql.createConnection({
+            host: host,
+            user: username,
+            password: password,
+            database: openmrs
+        });
+
+        connection.connect();
+        console.log("")
+    }
+
+    else if(dbms=="mysql")
     {
         connection = mysql.createConnection({
             host: host,
